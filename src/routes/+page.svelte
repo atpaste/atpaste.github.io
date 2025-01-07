@@ -328,7 +328,7 @@ Created by @uwx https://github.com/uwx`;
     let initialSessionPromise = $state<Promise<void>>();
     
     $effect(() => {
-        if (value !== defaultValue)
+        if (value !== defaultValue && value.trim() !== '')
             localStorage.value = value;
         localStorage.isEncrypted = isEncrypted;
         localStorage.language = language;
@@ -378,7 +378,7 @@ Created by @uwx https://github.com/uwx`;
     }
 
     function title() {
-        return value && !value.startsWith('# Welcome to Atpaste!') ? value.slice(0, 30) : '@paste';
+        return value.trim() && !value.startsWith('# Welcome to Atpaste!') ? value.slice(0, 30) : '@paste';
     }
     
     async function share(event: Event) {
