@@ -9,7 +9,7 @@
 
     let value = $state(localStorage.value ?? `# Welcome to Atpaste!
 
-This is a paste that stores everything in your PDS, on the ATmosphere.
+This is a pastebin that stores everything in your PDS, on the ATmosphere.
 
 Try typing something, then hit Share!
 
