@@ -15,6 +15,6 @@
 
         await finalizeAuthorization(params);
 
-        goto('/create');
+        goto('/');
     });
 </script>
