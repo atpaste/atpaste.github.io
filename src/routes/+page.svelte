@@ -11,12 +11,17 @@ This is a pastebin that stores everything in your PDS, on the ATmosphere.
 
 Try typing something, then hit *Share*!
 
-(Note: The editor's text is also stored in your browser's local storage.)`;
+(Note: The editor's text is also stored in your browser's local storage.)
+
+Credits:
+
+- https://github.com/captbaritone/hashbin, which this is transparently based on
+- https://github.com/toptal/haste-server, which hashbin was based on
+ 
+Created by @uwx https://github.com/uwx`;
 
     let value = $state(localStorage.value ?? defaultValue);
 
-    let urlInput = $state('');
-    let downloadFileName = $state('');
     let isEncrypted = $state(localStorage.isEncrypted ?? false);
     let flask = $state<CodeCup>();
     let language = $state(localStorage.language ?? 'markdown');
