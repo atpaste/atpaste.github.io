@@ -7,7 +7,7 @@
     import { goto } from '$app/navigation';
     import { encryptData, generatePassphrase } from '$lib/crypto';
 
-    let value = $state(localStorage.value ?? `# Welcome to Atpaste!
+    let value = $state(localStorage.value ?? `# Welcome to @paste!
 
 This is a pastebin that stores everything in your PDS, on the ATmosphere.
 
