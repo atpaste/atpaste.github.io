@@ -3,6 +3,7 @@ import type { At } from '@atcute/client/lexicons';
 import { now as tidNow } from '@atcute/tid';
 import { compress } from '$lib/zlib';
 import { encryptData, generatePassphrase } from '$lib/crypto';
+import { AtUri } from '@atproto/syntax';
 
 export class AtpasteClient {
     constructor(private readonly loginState: {
@@ -97,5 +98,30 @@ export class AtpasteClient {
         });
 
         return { ...result, rkey, passphrase };
+    }
+
+    async listPastes(): Promise<{ rkey: string; blob?: At.Blob<string>; cid: string; isEncrypted: boolean; }[]> {
+        const { records: uploads } = await this.agent.list({
+            collection: 'blue.zio.atfile.upload',
+            repo: this.user.did,
+        });
+
+        return uploads
+            .filter(upload => upload.value.finger?.id === 'io.github.atpaste.paste')
+            .map(upload => ({
+                rkey: new AtUri(upload.uri).rkey,
+                blob: upload.value.blob,
+                cid: upload.cid,
+                isEncrypted: upload.value.file?.mimeType === 'application/vnd.age'
+            }));
+    }
+    
+    async deletePaste(rkey: string, cid?: string) {
+        await this.agent.delete({
+            collection: 'blue.zio.atfile.upload',
+            repo: this.user.did,
+            rkey,
+            swapRecord: cid,
+        })
     }
 }

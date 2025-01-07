@@ -3,7 +3,6 @@
 
     import CodeCup from '@calumk/codecup';
     import { authenticateIfNecessary, revokeSessions, savedHandle, user, waitForInitialSession } from '$lib/atproto/signed-in-user';
-    import { get } from 'svelte/store';
     import { goto } from '$app/navigation';
 
     let value = $state(localStorage.value ?? `# Welcome to Atpaste!
@@ -379,7 +378,7 @@ Try typing something, then hit *Share*!
     async function share(event: Event) {
         event.preventDefault();
 
-        const theUser = get(user);
+        const theUser = $user;
         if (!theUser) {
             return;
         }
@@ -398,12 +397,12 @@ Try typing something, then hit *Share*!
     async function signIn(event: Event) {
         event.preventDefault();
 
-        if (!get(user)) {
+        if (!$user) {
             await waitForInitialSession();
         }
 
-        if (!get(user)) {
-            const handle = get(savedHandle) ?? prompt('What\'s your @handle?');
+        if (!$user) {
+            const handle = $savedHandle ?? prompt('What\'s your @handle?');
             if (!handle) return;
 
             await authenticateIfNecessary(handle, false);
@@ -417,7 +416,9 @@ Try typing something, then hit *Share*!
         return false;
     }
 
-    function signOut() {
+    function signOut(event: Event) {
+        event.preventDefault();
+
         revokeSessions();
     }
 </script>
@@ -435,6 +436,7 @@ Try typing something, then hit *Share*!
         {#if $user}
             <a href="javascript: void 0" role="button" onclick={share}>Share</a> |
             <a href="javascript: void 0" role="button" onclick={clear}>New</a> |
+            <a href="/manage" role="button">Manage Pastes</a> |
             <a href="javascript: void 0" role="button" onclick={signOut}>Sign Out</a>
         {:else}
             <a href="javascript: void 0" role="button" onclick={clear}>New</a>
