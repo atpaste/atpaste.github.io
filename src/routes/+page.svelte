@@ -419,6 +419,7 @@ Created by @uwx https://github.com/uwx`;
         event.preventDefault();
 
         value = '';
+        flask?.updateCode(value);
         return false;
     }
 
