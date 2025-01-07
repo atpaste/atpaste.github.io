@@ -322,6 +322,7 @@ Try typing something, then hit Share!
         'yang',
         'zig',
     ];
+    let initialSessionPromise: Promise<void> | undefined;
     
     $effect(() => {
         localStorage.value = value;
@@ -334,7 +335,7 @@ Try typing something, then hit Share!
     })
 
     onMount(() => {
-        waitForInitialSession();
+        initialSessionPromise = waitForInitialSession();
 
         processContent(); // Update urlInput and download link
 
@@ -437,8 +438,12 @@ Try typing something, then hit Share!
             <a href="javascript: void 0" role="button" onclick={clear}>New</a> |
             <a href="javascript: void 0" role="button" onclick={signOut}>Sign Out</a>
         {:else}
-            <a href="javascript: void 0" role="button" onclick={clear}>New</a> |
-            <a href="javascript: void 0" role="button" onclick={signIn}>Sign In</a>
+            <a href="javascript: void 0" role="button" onclick={clear}>New</a>
+            {#await initialSessionPromise}
+                <!-- empty -->
+            {:then _}
+                | <a href="javascript: void 0" role="button" onclick={signIn}>Sign In</a>
+            {/await}
         {/if}
 
         <input type="text" id="urlInput" bind:value={urlInput} />
