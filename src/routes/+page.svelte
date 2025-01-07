@@ -20,11 +20,11 @@ Credits:
  
 Created by @uwx https://github.com/uwx`;
 
-    let value = $state(localStorage.value ?? defaultValue);
+    let value = $state<string>(localStorage.value ?? defaultValue);
 
-    let isEncrypted = $state(localStorage.isEncrypted ?? false);
+    let isEncrypted = $state<boolean>(localStorage.isEncrypted ?? false);
     let flask = $state<CodeCup>();
-    let language = $state(localStorage.language ?? 'markdown');
+    let language = $state<string>(localStorage.language ?? 'markdown');
     let languages = [
         'abap',
         'abnf',
@@ -325,7 +325,7 @@ Created by @uwx https://github.com/uwx`;
         'yang',
         'zig',
     ];
-    let initialSessionPromise: Promise<void> | undefined = $state();
+    let initialSessionPromise = $state<Promise<void>>();
     
     $effect(() => {
         if (value !== defaultValue)
@@ -378,7 +378,7 @@ Created by @uwx https://github.com/uwx`;
     }
 
     function title() {
-        return value ? value.slice(0, 30) : 'Atbin';
+        return value && !value.startsWith('# Welcome to Atpaste!') ? value.slice(0, 30) : '@paste';
     }
     
     async function share(event: Event) {
