@@ -1,5 +1,6 @@
 $main: #ffffff;
 $background: #27212e;
+$highlight-background: #eb64b927;
 
 $punctuation: #7b6995;
 $keyword: #40b4c4;
@@ -83,9 +84,26 @@ body {
     caret-color: $main !important;
     color: transparent !important;
 }
-.codecup__flatten {
-    padding: 0 !important;
+
+// For some reason merging these declarations breaks the editor
+.codecup__textarea::-moz-selection {
+    color: transparent !important;
+    background: $highlight-background !important;
 }
+
+.codecup__textarea::selection {
+    color: transparent !important;
+    background: $highlight-background !important;
+}
+
 .codecup {
     border: none !important;
+}
+
+.codecup::-moz-selection, .codecup ::-moz-selection {
+    background: $highlight-background !important;
+}
+
+.codecup::selection, .codecup ::selection {
+    background: $highlight-background !important;
 }
