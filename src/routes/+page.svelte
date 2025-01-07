@@ -7,13 +7,13 @@
     import { goto } from '$app/navigation';
     import { encryptData, generatePassphrase } from '$lib/crypto';
 
-    let value = $state(localStorage.value ?? `# Welcome to @paste!
+    let value = $state(localStorage.value ?? `# Welcome to Atpaste!
 
 This is a pastebin that stores everything in your PDS, on the ATmosphere.
 
-Try typing something, then hit Share!
+Try typing something, then hit *Share*!
 
-(Note: To delete pastes, you'll have to use https://github.com/ziodotsh/atfile.)
+(Note: To delete pastes, you'll have to use \`https://github.com/ziodotsh/atfile\`.)
 
 (Note: The editor's text is also stored in your browser's local storage.)`);
 
