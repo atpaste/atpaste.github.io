@@ -5,15 +5,15 @@
     import { authenticateIfNecessary, revokeSessions, savedHandle, user, waitForInitialSession } from '$lib/atproto/signed-in-user';
     import { goto } from '$app/navigation';
 
-    let value = $state(localStorage.value ?? `# Welcome to Atpaste!
+    const defaultValue = `# Welcome to Atpaste!
 
 This is a pastebin that stores everything in your PDS, on the ATmosphere.
 
 Try typing something, then hit *Share*!
 
-(Note: To delete pastes, you'll have to use \`https://github.com/ziodotsh/atfile\`.)
+(Note: The editor's text is also stored in your browser's local storage.)`;
 
-(Note: The editor's text is also stored in your browser's local storage.)`);
+    let value = $state(localStorage.value ?? defaultValue);
 
     let urlInput = $state('');
     let downloadFileName = $state('');
@@ -323,7 +323,8 @@ Try typing something, then hit *Share*!
     let initialSessionPromise: Promise<void> | undefined = $state();
     
     $effect(() => {
-        localStorage.value = value;
+        if (value !== defaultValue)
+            localStorage.value = value;
         localStorage.isEncrypted = isEncrypted;
         localStorage.language = language;
     });
