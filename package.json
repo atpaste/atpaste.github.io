@@ -10,7 +10,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "eslint .",
-    	"lex": "tsx ../atcute-lex-cli-ex/src/index.ts generate -o src/lib/atproto/lexicon.ts lexicons/*.yml lexicons/ziodotsh/**/*.json"
+    	"lex": "tsx ../atcute-lex-cli-ex/src/index.ts generate -o src/lib/atproto/lexicon.ts lexicons/*.yml lexicons/zio-lexicons/**/*.json"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.3",

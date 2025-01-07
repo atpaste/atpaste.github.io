@@ -1,0 +1,91 @@
+$main: #ffffff;
+$background: #27212e;
+
+$punctuation: #7b6995;
+$keyword: #40b4c4;
+$operator: #ff5598;
+$string: #b4dce7;
+$comment: #91889b;
+$prolog: $comment;
+$cdata: $comment;
+$function: #eb64b9;
+$boolean: #ffe261;
+$number: #b381c5;
+$selector: #eb64b9;
+$property: #40b4c4;
+$tag: #74dfc4;
+$attr-value: #b4dce7;
+$constant: $boolean;
+$builtin: $boolean;
+$important: $keyword;
+$atrule: $keyword;
+$doctype: $tag;
+$operator: $tag;
+$inserted: $tag;
+$class-name: $tag;
+$symbol: $tag;
+$attr-name: $selector;
+$deleted: $selector;
+$regex: $attr-value;
+$char: $attr-value;
+$variable: #ffffff;
+$entity: $variable;
+$url: $variable;
+
+body {
+    background: $background;
+    color: $main;
+    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+}
+
+.codecup {
+    background: $background;
+    color: $main;
+}
+
+.codecup .token.punctuation { color: $punctuation; }
+.codecup .token.keyword { color: $keyword; }
+.codecup .token.operator { color: $operator; }
+.codecup .token.string { color: $string; }
+.codecup .token.comment { color: $comment; }
+.codecup .token.function { color: $function; }
+.codecup .token.boolean { color: $boolean; }
+.codecup .token.number { color: $number; }
+.codecup .token.selector { color: $selector; }
+.codecup .token.property { color: $property; }
+.codecup .token.tag { color: $tag; }
+.codecup .token.attr-value { color: $attr-value; }
+
+.codecup .token.prolog { color: $prolog; }
+.codecup .token.cdata { color: $cdata; }
+.codecup .token.constant { color: $constant; }
+.codecup .token.builtin { color: $builtin; }
+.codecup .token.important { color: $important; }
+.codecup .token.atrule { color: $atrule; }
+.codecup .token.doctype { color: $doctype; }
+.codecup .token.operator { color: $operator; }
+.codecup .token.inserted { color: $inserted; }
+.codecup .token.class-name { color: $class-name; }
+.codecup .token.symbol { color: $symbol; }
+.codecup .token.attr-name { color: $attr-name; }
+.codecup .token.deleted { color: $deleted; }
+.codecup .token.regex { color: $regex; }
+.codecup .token.char { color: $char; }
+.codecup .token.variable { color: $variable; }
+.codecup .token.entity { color: $entity; }
+.codecup .token.url { color: $url; }
+
+.codecup .token.bold { font-weight: bold; }
+.codecup .token.italic { font-style: italic; }
+.codecup .token.entity { cursor: help; }
+
+.codecup__textarea {
+    caret-color: $main !important;
+    color: transparent !important;
+}
+.codecup__flatten {
+    padding: 0 !important;
+}
+.codecup {
+    border: none !important;
+}

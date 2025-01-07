@@ -1,9 +1,7 @@
 import { KittyAgent } from 'kitty-agent';
 import type { At } from '@atcute/client/lexicons';
-import { user } from './signed-in-user';
-import { AtUri } from '@atproto/syntax';
 import { now as tidNow } from '@atcute/tid';
-import { get } from 'svelte/store';
+import { compress } from '$lib/zlib';
 
 export class AtpasteClient {
     constructor(private readonly loginState: {
@@ -12,6 +10,7 @@ export class AtpasteClient {
         readonly pds: string;
         readonly agent: KittyAgent;
     }) {}
+    
     get agent(): KittyAgent {
         return this.loginState.agent;
     }
@@ -20,29 +19,37 @@ export class AtpasteClient {
         return this.loginState;
     }
 
-    async uploadPage(
-        path: string,
-        pageContents: string,
+    async uploadPaste(
+        pasteContents: string,
         existingCid?: string,
     ): Promise<{ rkey: string; cid: At.CID; uri: At.Uri; }> {
-        const pageBinary = new TextEncoder().encode(pageContents);
-        const mimeType = 'text/plain';
+        const pageBinary = await compress(new TextEncoder().encode(pasteContents));
+        const mimeType = 'application/zlib';
 
-        const blob = await this.agent.uploadBlob(new Blob([pageContents], { type: mimeType }));
+        const blob = await this.agent.uploadBlob(new Blob([pageBinary], { type: mimeType }));
 
         const rkey = tidNow();
 
         const result = await this.agent.put({
-            collection: 'io.github.atweb.file',
+            collection: 'blue.zio.atfile.upload',
             repo: this.user.did,
             rkey,
             swapCommit: existingCid,
             record: {
-                $type: 'io.github.atweb.file',
-                body: blob,
-                filePath: path,
+                $type: 'blue.zio.atfile.upload',
+                blob: blob,
+                file: {
+                    mimeType: 'application/zlib',
+                    modifiedAt: new Date().toISOString(),
+                    name: rkey,
+                    size: pageBinary.length
+                },
                 createdAt: new Date().toISOString(),
-                modifiedAt: new Date().toISOString(),
+                finger: {
+                    $type: 'blue.zio.atfile.finger#browser',
+                    id: 'io.github.atpaste.paste',
+                    userAgent: navigator.userAgent,
+                },
             }
         });
 

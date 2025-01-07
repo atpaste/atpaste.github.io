@@ -1,7 +1,7 @@
 <script lang="ts">
 	let { children } = $props();
 
-    import '../styles/pico.scss';
+    import '../styles/index.scss';
 </script>
 
 {@render children()}
