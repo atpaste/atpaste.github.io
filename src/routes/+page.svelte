@@ -439,11 +439,13 @@ Try typing something, then hit Share!
             <a href="javascript: void 0" role="button" onclick={signOut}>Sign Out</a>
         {:else}
             <a href="javascript: void 0" role="button" onclick={clear}>New</a>
-            {#await initialSessionPromise}
-                <!-- empty -->
-            {:then _}
-                | <a href="javascript: void 0" role="button" onclick={signIn}>Sign In</a>
-            {/await}
+            {#if initialSessionPromise}
+                {#await initialSessionPromise}
+                    <!-- empty -->
+                {:then _}
+                    | <a href="javascript: void 0" role="button" onclick={signIn}>Sign In</a>
+                {/await}
+            {/if}
         {/if}
 
         <input type="text" id="urlInput" bind:value={urlInput} />
