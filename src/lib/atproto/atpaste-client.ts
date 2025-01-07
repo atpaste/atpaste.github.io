@@ -1,4 +1,4 @@
-import { KittyAgent } from 'kitty-agent';
+import { type KittyAgent, getSha256 } from 'kitty-agent';
 import type { At } from '@atcute/client/lexicons';
 import { now as tidNow } from '@atcute/tid';
 import { compress } from '$lib/zlib';
@@ -89,6 +89,10 @@ export class AtpasteClient {
                     id: 'io.github.atpaste.paste',
                     userAgent: navigator.userAgent,
                 },
+                checksum: {
+                    algo: 'sha-256',
+                    hash: getSha256(blob)
+                }
             }
         });
 

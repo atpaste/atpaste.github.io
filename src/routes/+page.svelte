@@ -5,7 +5,6 @@
     import { authenticateIfNecessary, revokeSessions, savedHandle, user, waitForInitialSession } from '$lib/atproto/signed-in-user';
     import { get } from 'svelte/store';
     import { goto } from '$app/navigation';
-    import { encryptData, generatePassphrase } from '$lib/crypto';
 
     let value = $state(localStorage.value ?? `# Welcome to Atpaste!
 
@@ -368,7 +367,7 @@ Try typing something, then hit *Share*!
     let f: number | NodeJS.Timeout;
     function contentChanged() {
         clearInterval(f);
-        f = setTimeout(function () {
+        f = setTimeout(() => {
             processContent();
         }, 500);
     }

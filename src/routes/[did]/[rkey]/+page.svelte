@@ -7,20 +7,20 @@
     import 'prismjs/plugins/autoloader/prism-autoloader';
     import { onMount } from 'svelte';
 
-    const languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
-    const use_minified = false;
+    const languagesPath = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+    const useMinified = false;
     
 	/**
 	 * @param {string} lang
 	 * @returns {string}
 	 */
 	function getLanguagePath(lang: string): string {
-		return languages_path + 'prism-' + lang + (use_minified ? '.min' : '') + '.js';
+		return `${languagesPath}prism-${lang}${useMinified ? '.min' : ''}.js`;
 	}
 
 	function addScript(src: string) {
         return new Promise<void>((resolve, reject) => {
-            var s = document.createElement('script');
+            const s = document.createElement('script');
             s.src = src;
             s.async = true;
             s.onload = () => {

@@ -1,7 +1,7 @@
-import { decryptData } from "$lib/crypto";
-import { decompress } from "$lib/zlib";
-import type { At } from "@atcute/client/lexicons";
-import { KittyAgent } from "kitty-agent";
+import { decryptData } from '$lib/crypto';
+import { decompress } from '$lib/zlib';
+import type { At } from '@atcute/client/lexicons';
+import { KittyAgent } from 'kitty-agent';
 
 const unauthedAgent = KittyAgent.createUnauthed();
 
@@ -16,7 +16,7 @@ export async function downloadPaste(did: At.DID, rkey: string) {
         return { uri, text: '' };
     }
 
-    let blob: Uint8Array = await unauthedAgent.getBlobAsBinary({
+    const blob: Uint8Array = await unauthedAgent.getBlobAsBinary({
         did,
         cid: record.blob.ref.$link,
     });
@@ -35,7 +35,7 @@ export async function downloadEncryptedPaste(did: At.DID, rkey: string, passphra
         return { uri, text: '' };
     }
 
-    let blob: Uint8Array = await unauthedAgent.getBlobAsBinary({
+    const blob: Uint8Array = await unauthedAgent.getBlobAsBinary({
         did,
         cid: record.blob.ref.$link,
     });

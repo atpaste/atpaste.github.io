@@ -1,7 +1,6 @@
 import type { At } from '@atcute/client/lexicons';
 
-import { StatefulOAuthClient } from 'kitty-agent/out/oauth';
-import { KittyAgent } from 'kitty-agent';
+import { type KittyAgent, StatefulOAuthClient } from 'kitty-agent';
 import { AtpasteClient } from './atpaste-client';
 import { derived, writable, type Readable } from 'svelte/store';
 
