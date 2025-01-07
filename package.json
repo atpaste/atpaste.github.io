@@ -40,7 +40,7 @@
 		"@picocss/pico": "^2.0.6",
 		"codeflask": "^1.4.1",
 		"fflate": "^0.8.2",
-		"kitty-agent": "^2.0.0",
+		"kitty-agent": "^2.0.1",
 		"monaco-editor": "^0.52.2",
 		"prismjs": "^1.29.0"
 	}
