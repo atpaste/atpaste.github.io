@@ -322,7 +322,7 @@ Try typing something, then hit Share!
         'yang',
         'zig',
     ];
-    let initialSessionPromise: Promise<void> | undefined;
+    let initialSessionPromise: Promise<void> | undefined = $state();
     
     $effect(() => {
         localStorage.value = value;
