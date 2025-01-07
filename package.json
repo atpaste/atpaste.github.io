@@ -42,7 +42,7 @@
 		"age-encryption": "^0.2.0",
 		"codeflask": "^1.4.1",
 		"fflate": "^0.8.2",
-		"kitty-agent": "^2.0.1",
+		"kitty-agent": "^2.0.2",
 		"monaco-editor": "^0.52.2",
 		"prismjs": "^1.29.0",
 		"uint8arrays": "^5.1.0"
