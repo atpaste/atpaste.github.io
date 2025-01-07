@@ -39,7 +39,7 @@
 
 	const did = page.params.did;
     const [rkey, language] = page.params.rkey.split('.');
-    const cryptoKey = page.params.cryptoKey;
+    const cryptoKey = document.location.hash.slice(1);
 
     let pre: HTMLPreElement;
 

@@ -388,7 +388,7 @@ Try typing something, then hit Share!
         if (isEncrypted) {
             const { rkey, passphrase } = await theUser.client.uploadEncryptedPaste(value);
 
-            goto(`/${theUser.did}/${rkey}.${language}/${passphrase}`);
+            goto(`/${theUser.did}/${rkey}.${language}#${passphrase}`);
         } else {
             const { rkey } = await theUser.client.uploadPaste(value);
 
