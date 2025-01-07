@@ -5,6 +5,7 @@
     import { authenticateIfNecessary, revokeSessions, savedHandle, user, waitForInitialSession } from '$lib/atproto/signed-in-user';
     import { get } from 'svelte/store';
     import { goto } from '$app/navigation';
+    import { encryptData, generatePassphrase } from '$lib/crypto';
 
     let value = $state(localStorage.value ?? `# Welcome to Atpaste!
 
@@ -383,9 +384,15 @@ Try typing something, then hit Share!
             return;
         }
 
-        const { rkey } = await theUser.client.uploadPaste(value);
+        if (isEncrypted) {
+            const { rkey, passphrase } = await theUser.client.uploadEncryptedPaste(value);
 
-        goto(`/${theUser.did}/${rkey}.${language}`);
+            goto(`/${theUser.did}/${rkey}.${language}/${passphrase}`);
+        } else {
+            const { rkey } = await theUser.client.uploadPaste(value);
+
+            goto(`/${theUser.did}/${rkey}.${language}`);
+        }
     }
 
     async function signIn(event: Event) {
@@ -417,8 +424,8 @@ Try typing something, then hit Share!
 
 <div class="main">
     <div id="tools">
-        <!-- <input type="checkbox" name="is-encrypted" bind:checked={isEncrypted} />
-        <label for="is-encrypted">Encrypted?</label> | -->
+        <input type="checkbox" name="is-encrypted" bind:checked={isEncrypted} />
+        <label for="is-encrypted">Encrypted?</label> |
         <select bind:value={language}>
             {#each languages as language}
                 <option value={language}>{language}</option>

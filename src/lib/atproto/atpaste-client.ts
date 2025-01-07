@@ -2,6 +2,7 @@ import { KittyAgent } from 'kitty-agent';
 import type { At } from '@atcute/client/lexicons';
 import { now as tidNow } from '@atcute/tid';
 import { compress } from '$lib/zlib';
+import { encryptData, generatePassphrase } from '$lib/crypto';
 
 export class AtpasteClient {
     constructor(private readonly loginState: {
@@ -21,9 +22,10 @@ export class AtpasteClient {
 
     async uploadPaste(
         pasteContents: string,
+        compression?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9,
         existingCid?: string,
     ): Promise<{ rkey: string; cid: At.CID; uri: At.Uri; }> {
-        const pageBinary = await compress(new TextEncoder().encode(pasteContents));
+        const pageBinary = await compress(new TextEncoder().encode(pasteContents), compression);
         const mimeType = 'application/zlib';
 
         const blob = await this.agent.uploadBlob(new Blob([pageBinary], { type: mimeType }));
@@ -54,5 +56,42 @@ export class AtpasteClient {
         });
 
         return { ...result, rkey };
+    }
+    async uploadEncryptedPaste(
+        pasteContents: string,
+        existingCid?: string,
+    ): Promise<{ passphrase: string, rkey: string; cid: At.CID; uri: At.Uri; }> {
+        const passphrase = generatePassphrase(128);
+        const pageBinary = await encryptData(new TextEncoder().encode(pasteContents), passphrase);
+        const mimeType = 'application/vnd.age'; // https://github.com/jshttp/mime-db/blob/49f8df0e170c7b40785e8aa4f464793b7fcfa41b/src/iana-types.json#L3277-L3282
+
+        const blob = await this.agent.uploadBlob(new Blob([pageBinary], { type: mimeType }));
+
+        const rkey = tidNow();
+
+        const result = await this.agent.put({
+            collection: 'blue.zio.atfile.upload',
+            repo: this.user.did,
+            rkey,
+            swapCommit: existingCid,
+            record: {
+                $type: 'blue.zio.atfile.upload',
+                blob: blob,
+                file: {
+                    mimeType: 'application/vnd.age',
+                    modifiedAt: new Date().toISOString(),
+                    name: rkey,
+                    size: pageBinary.length
+                },
+                createdAt: new Date().toISOString(),
+                finger: {
+                    $type: 'blue.zio.atfile.finger#browser',
+                    id: 'io.github.atpaste.paste',
+                    userAgent: navigator.userAgent,
+                },
+            }
+        });
+
+        return { ...result, rkey, passphrase };
     }
 }
