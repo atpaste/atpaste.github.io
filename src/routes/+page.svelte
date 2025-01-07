@@ -454,8 +454,6 @@ Created by @uwx https://github.com/uwx`;
                 {/await}
             {/if}
         {/if}
-
-        <input type="text" id="urlInput" bind:value={urlInput} />
     </div>
     <div id="text"></div>
 </div>
