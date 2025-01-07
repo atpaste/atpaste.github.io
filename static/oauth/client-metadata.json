@@ -1,0 +1,12 @@
+{
+    "client_id": "https://atpaste.github.io/oauth/client-metadata.json",
+    "client_name": "atpaste",
+    "client_uri": "https://atpaste.github.io",
+    "redirect_uris": ["https://atpaste.github.io/oauth/redirect"],
+    "scope": "atproto transition:generic",
+    "grant_types": ["authorization_code", "refresh_token"],
+    "response_types": ["code"],
+    "token_endpoint_auth_method": "none",
+    "application_type": "web",
+    "dpop_bound_access_tokens": true
+}

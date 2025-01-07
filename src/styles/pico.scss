@@ -1,0 +1,17 @@
+// /* Custom Class-less version for React */
+// @use "@picocss/pico/scss/pico" with (
+//     // Define the root element used to target <header>, <main>, <footer>
+//     // with $enable-semantic-container and $enable-responsive-spacings
+//     $semantic-root-element: ":is(#app, .pico-root)",
+    
+//     // Enable <header>, <main>, <footer> inside $semantic-root-element as containers
+//     $enable-semantic-container: true,
+
+//     // Enable .classes
+//     $enable-classes: true,
+    
+//     $theme-color: "fuchsia",
+//     $parent-selector: ".pico"
+// )
+
+@use './prism-laserwave.scss';

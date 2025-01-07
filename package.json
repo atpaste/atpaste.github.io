@@ -9,20 +9,38 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "eslint ."
+		"lint": "eslint .",
+    	"lex": "tsx ../atcute-lex-cli-ex/src/index.ts generate -o src/lib/atproto/lexicon.ts lexicons/*.yml lexicons/ziodotsh/**/*.json"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.3",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
+		"@types/codeflask": "^1.4.6",
+		"@types/node": "^22.10.5",
+		"@types/prismjs": "^1.26.5",
 		"eslint": "^9.7.0",
 		"eslint-plugin-svelte": "^2.36.0",
 		"globals": "^15.0.0",
+		"sass-embedded": "^1.83.1",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.0.0",
 		"vite": "^5.4.11"
+	},
+	"dependencies": {
+		"@atcute/client": "^2.0.6",
+		"@atcute/oauth-browser-client": "^1.0.9",
+		"@atcute/tid": "^1.0.2",
+		"@atproto/syntax": "^0.3.1",
+		"@calumk/codecup": "^1.9.4",
+		"@picocss/pico": "^2.0.6",
+		"codeflask": "^1.4.1",
+		"fflate": "^0.8.2",
+		"kitty-agent": "file:..\\kitty-agent",
+		"monaco-editor": "^0.52.2",
+		"prismjs": "^1.29.0"
 	}
 }
