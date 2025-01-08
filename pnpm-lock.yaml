@@ -39,8 +39,8 @@ importers:
         specifier: ^0.8.2
         version: 0.8.2
       kitty-agent:
-        specifier: ^7.0.1
-        version: 7.0.1(@atcute/cid@2.1.0)(@atcute/client@2.0.6)(@atcute/oauth-browser-client@1.0.9)(@atproto/syntax@0.3.1)
+        specifier: ^8.1.0
+        version: 8.1.0(@atcute/cid@2.1.0)(@atcute/client@2.0.6)(@atcute/oauth-browser-client@1.0.9)(@atproto/syntax@0.3.1)
       monaco-editor:
         specifier: ^0.52.2
         version: 0.52.2
@@ -557,8 +557,8 @@ packages:
   is-reference@3.0.3:
     resolution: {integrity: sha512-ixkJoqQvAP88E6wLydLGGqCJsrFUnqoH6HnaczB8XmDH1oaWU+xxdptvikTgaEhtZ53Ky6YXiBuUI2WXLMCwjw==}
 
-  kitty-agent@7.0.1:
-    resolution: {integrity: sha512-CYtcIN/52xfAqLtGYuXwozGAxoP0CrnikTtophaGGIGhxit0guRRM1xbkZj4fFOdrXLj0X84RR71Pa64HI88MQ==}
+  kitty-agent@8.1.0:
+    resolution: {integrity: sha512-BJKFG7XyLnUXt1FSOXSiaesQqXV7zLxlGMuxqpqSwfJxy2uXdt2HeFqU2HAfdU6aU5IMmvdiRQ/G0F/Sz6RLpQ==}
     peerDependencies:
       '@atcute/cid': ^2.1.0
       '@atcute/client': ^2.0.6
@@ -1205,7 +1205,7 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.6
 
-  kitty-agent@7.0.1(@atcute/cid@2.1.0)(@atcute/client@2.0.6)(@atcute/oauth-browser-client@1.0.9)(@atproto/syntax@0.3.1):
+  kitty-agent@8.1.0(@atcute/cid@2.1.0)(@atcute/client@2.0.6)(@atcute/oauth-browser-client@1.0.9)(@atproto/syntax@0.3.1):
     dependencies:
       '@atcute/cid': 2.1.0
       '@atcute/client': 2.0.6

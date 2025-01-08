@@ -1,6 +1,7 @@
 import type { At } from '@atcute/client/lexicons';
 
-import { type KittyAgent, StatefulOAuthClient } from 'kitty-agent';
+import type { KittyAgent } from 'kitty-agent';
+import { StatefulSvelteOAuthClient } from 'kitty-agent/oauth-svelte';
 import { AtpasteClient } from './atpaste-client';
 import { derived, writable, type Readable } from 'svelte/store';
 
@@ -12,14 +13,13 @@ export interface LoginState {
     readonly client: AtpasteClient;
 }
 
-const oauthClient: StatefulOAuthClient<AtpasteClient> = new StatefulOAuthClient<AtpasteClient>(
+const oauthClient: StatefulSvelteOAuthClient<AtpasteClient> = new StatefulSvelteOAuthClient<AtpasteClient>(
     {
         clientId: import.meta.env.VITE_OAUTH_CLIENT_ID,
         redirectUri: import.meta.env.VITE_OAUTH_REDIRECT_URI,
         scope: import.meta.env.VITE_OAUTH_SCOPE,
     },
-    writable,
-    derived,
+    { createWritableStore: writable, createDerivedStore: derived },
     (loginState) => new AtpasteClient(loginState),
 );
 
