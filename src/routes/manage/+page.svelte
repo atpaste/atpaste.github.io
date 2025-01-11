@@ -55,7 +55,7 @@
             <a href="/" role="button">New</a> |
             <a href="javascript: void 0" role="button" onclick={signOut}>Sign Out</a>
         {:else}
-            <a href="/" role="button">New</a> |
+            <a href="/" role="button">New</a>
             {#if initialSessionPromise}
                 {#await initialSessionPromise}
                     <!-- empty -->
@@ -88,13 +88,7 @@
 </div>
 
 <style lang="scss">
-    input[type="checkbox"] {
-        vertical-align: text-bottom;
-    }
-
     .main,
-    textarea,
-    input[type="text"],
     #tools {
         padding: 0;
         margin: 0;
@@ -123,14 +117,6 @@
         position: fixed;
         top: 0;
         box-sizing: border-box;
-    }
-    input[type="text"] {
-        display: none;
-        margin-top: 5px;
-        width: 100%;
-        border: 1px solid #4195d2;
-        padding: 5px;
-        border-radius: 3px;
     }
     
     @media (min-width: 600px) {
