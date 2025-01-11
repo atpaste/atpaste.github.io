@@ -1,18 +1,19 @@
 <script lang="ts">
     import type { AtpasteClient } from '$lib/atproto/atpaste-client';
+    import { formatGetBlobUrl } from '$lib/atproto/blob-utils';
     import { authenticateIfNecessary, revokeSessions, savedHandle, user, waitForInitialSession } from '$lib/atproto/signed-in-user';
     import type { At } from '@atcute/client/lexicons';
     import { onMount } from 'svelte';
 
     let initialSessionPromise = $state<Promise<void>>();
-    let listPastesPromise = $state<ReturnType<AtpasteClient['listPastes']>>();
+    let listPastesPromise = $state<ReturnType<AtpasteClient['listPastesAndFiles']>>();
     
     onMount(async () => {
         initialSessionPromise = waitForInitialSession();
 
         listPastesPromise = initialSessionPromise.then(() => {
             if ($user) {
-                return $user.client.listPastes();
+                return $user.client.listPastesAndFiles();
             }
             return [];
         });
@@ -39,12 +40,12 @@
         revokeSessions();
     }
 
-    async function deletePaste(rkeyAndCid: { rkey: string, cid: At.CID }, event: Event) {
+    async function deletePasteOrFile(rkeyAndCid: { rkey: string, cid: At.CID }, event: Event) {
         event.preventDefault();
 
         if ($user && confirm('Are you sure you wish to delete this paste?')) {
-            await $user.client.deletePaste(rkeyAndCid.rkey, rkeyAndCid.cid);
-            listPastesPromise = $user.client.listPastes();
+            await $user.client.deletePasteOrFile(rkeyAndCid.rkey, rkeyAndCid.cid);
+            listPastesPromise = $user.client.listPastesAndFiles();
         }
     }
 </script>
@@ -72,12 +73,16 @@
             {:then pastes} 
                 {#each pastes as paste}
                     <p>
-                        {#if !paste.isEncrypted}
-                            <a href="/{$user.did}/{paste.rkey}.plaintext">{paste.rkey}</a>
+                        {#if paste.isFile && paste.blob}
+                            <a href="{formatGetBlobUrl($user.pds, $user.did, paste.blob?.ref.$link)}">{paste.rkey}</a> (File)
                         {:else}
-                            {paste.rkey} (Encrypted)
+                            {#if !paste.isEncrypted}
+                                <a href="/{$user.did}/{paste.rkey}.plaintext">{paste.rkey}</a>
+                            {:else}
+                                {paste.rkey} (Encrypted)
+                            {/if}
                         {/if}
-                        <a href="#deletePaste" role="button" onclick={event => deletePaste(paste, event)}>
+                        <a href="#deletePaste" role="button" onclick={event => deletePasteOrFile(paste, event)}>
                             🗑️
                         </a>
                     </p>

@@ -11,7 +11,7 @@ export class AtpasteClient {
         readonly pds: string;
         readonly agent: KittyAgent;
     }) {}
-    
+
     get agent(): KittyAgent {
         return this.loginState.agent;
     }
@@ -57,6 +57,53 @@ export class AtpasteClient {
 
         return { ...result, rkey };
     }
+    
+    async uploadFile(
+        file: Uint8Array | Blob,
+        existingCid?: string,
+    ): Promise<{ rkey: string; cid: At.CID; uri: At.Uri; blob: { pds: string; did: At.DID; cid: At.CID; } }> {
+        const mimeType = file instanceof Blob
+            ? file.type
+            : (await import('file-type-mime')).parse(file.buffer as ArrayBuffer)?.mime ?? 'application/octet-stream';
+
+        const blob = await this.agent.uploadBlob(new Blob([file], { type: mimeType }));
+
+        const rkey = ShortId.now();
+
+        const result = await this.agent.put({
+            collection: 'blue.zio.atfile.upload',
+            repo: this.user.did,
+            rkey,
+            swapCommit: existingCid,
+            record: {
+                $type: 'blue.zio.atfile.upload',
+                blob: blob,
+                file: {
+                    mimeType,
+                    modifiedAt: new Date().toISOString(),
+                    name: rkey,
+                    size: 'size' in file ? file.size : file.length
+                },
+                createdAt: new Date().toISOString(),
+                finger: {
+                    $type: 'blue.zio.atfile.finger#browser',
+                    id: 'io.github.atpaste.file',
+                    userAgent: navigator.userAgent,
+                },
+            }
+        });
+
+        return {
+            ...result,
+            rkey,
+            blob: {
+                cid: blob.ref.$link,
+                did: this.user.did,
+                pds: this.user.pds,
+            }
+        };
+    }
+    
     async uploadEncryptedPaste(
         pasteContents: string,
         existingCid?: string,
@@ -100,23 +147,24 @@ export class AtpasteClient {
         return { ...result, rkey, passphrase };
     }
 
-    async listPastes(): Promise<{ rkey: string; blob?: At.Blob<string>; cid: string; isEncrypted: boolean; }[]> {
+    async listPastesAndFiles(): Promise<{ rkey: string; blob?: At.Blob<string>; cid: string; isEncrypted: boolean; isFile: boolean; }[]> {
         const { records: uploads } = await this.agent.list({
             collection: 'blue.zio.atfile.upload',
             repo: this.user.did,
         });
 
         return uploads
-            .filter(upload => upload.value.finger?.id === 'io.github.atpaste.paste')
+            .filter(upload => upload.value.finger?.id === 'io.github.atpaste.paste' || upload.value.finger?.id === 'io.github.atpaste.file')
             .map(upload => ({
                 rkey: upload.uri.rkey,
                 blob: upload.value.blob,
                 cid: upload.cid,
-                isEncrypted: upload.value.file?.mimeType === 'application/vnd.age'
+                isEncrypted: upload.value.file?.mimeType === 'application/vnd.age',
+                isFile: upload.value.finger?.id === 'io.github.atpaste.file',
             }));
     }
     
-    async deletePaste(rkey: string, cid?: string) {
+    async deletePasteOrFile(rkey: string, cid?: string) {
         await this.agent.delete({
             collection: 'blue.zio.atfile.upload',
             repo: this.user.did,

@@ -443,7 +443,8 @@ Created by @uwx https://github.com/uwx`;
         {#if $user}
             <a href="#share" role="button" onclick={share}>Share</a> |
             <a href="#clear" role="button" onclick={clear}>New</a> |
-            <a href="/manage" role="button">Manage Pastes</a> |
+            <a href="/manage" role="button">Manage Pastes & Uploads</a> |
+            <a href="/atbox" role="button">Upload Files</a> |
             <a href="#signOut" role="button" onclick={signOut}>Sign Out</a>
         {:else}
             <a href="#clear" role="button" onclick={clear}>New</a>
