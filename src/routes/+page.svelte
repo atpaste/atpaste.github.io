@@ -462,7 +462,7 @@ Created by @uwx https://github.com/uwx`;
 
 <style lang="scss">
     input[type="checkbox"] {
-        vertical-align: text-bottom;
+        vertical-align: bottom;
     }
 
     .main,
