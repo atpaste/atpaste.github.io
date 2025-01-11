@@ -161,7 +161,11 @@ export class AtpasteClient {
                 cid: upload.cid,
                 isEncrypted: upload.value.file?.mimeType === 'application/vnd.age',
                 isFile: upload.value.finger?.id === 'io.github.atpaste.file',
-            }));
+                date: new Date(upload.value.createdAt ?? upload.value.file?.modifiedAt ?? ''),
+            }))
+            .sort((a, b) => {
+                return b.date.getTime() - a.date.getTime();
+            });
     }
     
     async deletePasteOrFile(rkey: string, cid?: string) {
