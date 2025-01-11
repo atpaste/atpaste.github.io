@@ -53,14 +53,14 @@
     <div id="tools">
         {#if $user}
             <a href="/" role="button">New</a> |
-            <a href="javascript: void 0" role="button" onclick={signOut}>Sign Out</a>
+            <a href="#signOut" role="button" onclick={signOut}>Sign Out</a>
         {:else}
             <a href="/" role="button">New</a>
             {#if initialSessionPromise}
                 {#await initialSessionPromise}
                     <!-- empty -->
                 {:then _}
-                    | <a href="javascript: void 0" role="button" onclick={signIn}>Sign In</a>
+                    | <a href="#signIn" role="button" onclick={signIn}>Sign In</a>
                 {/await}
             {/if}
         {/if}
@@ -77,7 +77,7 @@
                         {:else}
                             {paste.rkey} (Encrypted)
                         {/if}
-                        <a href="javascript: void 0" role="button" onclick={event => deletePaste(paste, event)}>
+                        <a href="#deletePaste" role="button" onclick={event => deletePaste(paste, event)}>
                             🗑️
                         </a>
                     </p>

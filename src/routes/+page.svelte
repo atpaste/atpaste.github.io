@@ -441,17 +441,17 @@ Created by @uwx https://github.com/uwx`;
         </select> |
 
         {#if $user}
-            <a href="javascript: void 0" role="button" onclick={share}>Share</a> |
-            <a href="javascript: void 0" role="button" onclick={clear}>New</a> |
+            <a href="#share" role="button" onclick={share}>Share</a> |
+            <a href="#clear" role="button" onclick={clear}>New</a> |
             <a href="/manage" role="button">Manage Pastes</a> |
-            <a href="javascript: void 0" role="button" onclick={signOut}>Sign Out</a>
+            <a href="#signOut" role="button" onclick={signOut}>Sign Out</a>
         {:else}
-            <a href="javascript: void 0" role="button" onclick={clear}>New</a>
+            <a href="#clear" role="button" onclick={clear}>New</a>
             {#if initialSessionPromise}
                 {#await initialSessionPromise}
                     <!-- empty -->
                 {:then _}
-                    | <a href="javascript: void 0" role="button" onclick={signIn}>Sign In</a>
+                    | <a href="#signIn" role="button" onclick={signIn}>Sign In</a>
                 {/await}
             {/if}
         {/if}
