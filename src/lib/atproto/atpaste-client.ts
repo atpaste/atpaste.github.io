@@ -147,7 +147,7 @@ export class AtpasteClient {
         return { ...result, rkey, passphrase };
     }
 
-    async listPastesAndFiles(): Promise<{ rkey: string; blob?: At.Blob<string>; cid: string; isEncrypted: boolean; isFile: boolean; }[]> {
+    async listPastesAndFiles(): Promise<{ rkey: string; blob?: At.Blob<string>; cid: string; isEncrypted: boolean; isFile: boolean; date: Date; }[]> {
         const { records: uploads } = await this.agent.list({
             collection: 'blue.zio.atfile.upload',
             repo: this.user.did,
