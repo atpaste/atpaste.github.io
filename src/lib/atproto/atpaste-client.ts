@@ -3,7 +3,6 @@ import type { At } from '@atcute/client/lexicons';
 import { now as tidNow } from '@atcute/tid';
 import { compress } from '$lib/zlib';
 import { encryptData, generatePassphrase } from '$lib/crypto';
-import { AtUri } from '@atproto/syntax';
 
 export class AtpasteClient {
     constructor(private readonly loginState: {
@@ -31,7 +30,7 @@ export class AtpasteClient {
 
         const blob = await this.agent.uploadBlob(new Blob([pageBinary], { type: mimeType }));
 
-        const rkey = tidNow();
+        const rkey = ShortId.now();
 
         const result = await this.agent.put({
             collection: 'blue.zio.atfile.upload',
@@ -42,7 +41,7 @@ export class AtpasteClient {
                 $type: 'blue.zio.atfile.upload',
                 blob: blob,
                 file: {
-                    mimeType: 'application/zlib',
+                    mimeType,
                     modifiedAt: new Date().toISOString(),
                     name: rkey,
                     size: pageBinary.length
@@ -80,7 +79,7 @@ export class AtpasteClient {
                 $type: 'blue.zio.atfile.upload',
                 blob: blob,
                 file: {
-                    mimeType: 'application/vnd.age',
+                    mimeType,
                     modifiedAt: date,
                     name: rkey,
                     size: pageBinary.length
