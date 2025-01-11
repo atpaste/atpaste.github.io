@@ -135,7 +135,7 @@
         outline: none;
         border: none;
         box-sizing: border-box;
-        padding: 60px 30px 30px 30px;
+        padding: 100px 30px 30px 30px;
     }
     a {
         text-decoration: none;
