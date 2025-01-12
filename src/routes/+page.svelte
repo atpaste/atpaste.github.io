@@ -346,6 +346,7 @@ Created by @uwx https://github.com/uwx`;
         flask = new CodeCup('#text', {
             language: 'ruby',
             defaultTheme: false,
+            minLines: 25,
             maxLines: Infinity,
         });
         console.log(flask);
