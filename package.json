@@ -39,11 +39,17 @@
 		"codeflask": "^1.4.1",
 		"fflate": "^0.8.2",
 		"file-type-mime": "^0.4.5",
-		"kitty-agent": "^8.1.0",
+		"kitty-agent": "^8.5.1",
 		"monaco-editor": "^0.52.2",
 		"prismjs": "^1.29.0",
+		"rehype-expressive-code": "^0.40.1",
+		"rehype-sanitize": "^6.0.0",
+		"rehype-stringify": "^10.0.1",
+		"remark-parse": "^11.0.0",
+		"remark-rehype": "^11.1.1",
 		"svelte-file-dropzone": "^2.0.9",
-		"uint8arrays": "^5.1.0"
+		"uint8arrays": "^5.1.0",
+		"unified": "^11.0.5"
 	},
 	"packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
 }

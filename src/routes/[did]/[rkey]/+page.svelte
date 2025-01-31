@@ -2,6 +2,7 @@
     import { page } from '$app/state';
     import { downloadEncryptedPaste, downloadPaste } from '$lib/atproto/unauthed-client';
     import type { At } from '@atcute/client/lexicons';
+    import type { AtUri } from '@atproto/syntax';
 
     import Prism from 'prismjs';
     import 'prismjs/plugins/autoloader/prism-autoloader';
@@ -43,7 +44,7 @@
 
     let pre: HTMLPreElement;
 
-    let promise = $state<Promise<{ uri: string; text: string; } | { uri: string; html: string; }>>();
+    let promise = $state<Promise<{ uri: AtUri; text: string; } | { uri: AtUri; html: string; }>>();
 
     onMount(() => {
         promise = Promise.allSettled([
