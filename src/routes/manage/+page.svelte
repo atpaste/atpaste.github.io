@@ -1,8 +1,8 @@
 <script lang="ts">
     import type { AtpasteClient } from '$lib/atproto/atpaste-client';
-    import { formatGetBlobUrl } from '$lib/atproto/blob-utils';
+    import { formatGetBlobUrl, getBlobCid } from '$lib/atproto/blob-utils';
     import { authenticateIfNecessary, revokeSessions, savedHandle, user, waitForInitialSession } from '$lib/atproto/signed-in-user';
-    import type { At } from '@atcute/client/lexicons';
+    import type { Cid } from '@atcute/lexicons';
     import { onMount } from 'svelte';
 
     let initialSessionPromise = $state<Promise<void>>();
@@ -40,7 +40,7 @@
         revokeSessions();
     }
 
-    async function deletePasteOrFile(rkeyAndCid: { rkey: string, cid: At.CID }, event: Event) {
+    async function deletePasteOrFile(rkeyAndCid: { rkey: string, cid: Cid }, event: Event) {
         event.preventDefault();
 
         if ($user && confirm('Are you sure you wish to delete this paste?')) {
@@ -101,7 +101,7 @@
                 {#each pastes as paste}
                     <p>
                         {#if paste.isFile && paste.blob}
-                            <a href="{formatGetBlobUrl($user.pds, $user.did, paste.blob?.ref.$link)}">{paste.rkey}</a> (File)
+                            <a href="{formatGetBlobUrl($user.pds, $user.did, getBlobCid(paste.blob))}">{paste.rkey}</a> (File)
                         {:else}
                             {#if !paste.isEncrypted}
                                 <a href="/{$user.did}/{paste.rkey}.plaintext">{paste.rkey}</a>

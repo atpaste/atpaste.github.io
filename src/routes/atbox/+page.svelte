@@ -8,7 +8,6 @@
         user,
         waitForInitialSession,
     } from '$lib/atproto/signed-in-user';
-    import type { At } from '@atcute/client/lexicons';
     import { onMount } from 'svelte';
     import Dropzone from 'svelte-file-dropzone';
 
@@ -28,7 +27,7 @@
     }
 
     let initialSessionPromise = $state<Promise<void>>();
-    let listPastesPromise = $state<ReturnType<AtpasteClient['listPastes']>>();
+    // let listPastesPromise = $state<ReturnType<AtpasteClient['listPastesAndFiles']>>();
 
     onMount(async () => {
         initialSessionPromise = waitForInitialSession();

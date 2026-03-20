@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/state';
     import { downloadEncryptedPaste, downloadPaste } from '$lib/atproto/unauthed-client';
-    import type { At } from '@atcute/client/lexicons';
+    import type { Did } from '@atcute/lexicons';
     import type { AtUri } from '@atproto/syntax';
 
     import Prism from 'prismjs';
@@ -39,7 +39,7 @@
     Prism.manual = true;
 
 	const did = page.params.did;
-    const [rkey, language] = page.params.rkey.split('.');
+    const [rkey, language] = page.params.rkey!.split('.');
     const cryptoKey = document.location.hash.slice(1);
 
     let pre: HTMLPreElement;
@@ -50,8 +50,8 @@
         promise = Promise.allSettled([
             addScript(getLanguagePath(language)),
             cryptoKey
-                ? downloadEncryptedPaste(did as At.DID, rkey, cryptoKey)
-                : downloadPaste(did as At.DID, rkey)
+                ? downloadEncryptedPaste(did as Did, rkey, cryptoKey)
+                : downloadPaste(did as Did, rkey)
         ]).then(([addScriptResult, pasteResult]) => {
             if (pasteResult.status === 'rejected') throw new Error(pasteResult.reason);
             if (addScriptResult.status !== 'rejected') {

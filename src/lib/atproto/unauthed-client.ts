@@ -1,12 +1,13 @@
 import { decryptData } from '$lib/crypto';
 import { decompress } from '$lib/zlib';
-import type { At } from '@atcute/client/lexicons';
+import type { Did, Blob, LegacyBlob } from '@atcute/lexicons';
 import { KittyAgent } from 'kitty-agent';
+import { getBlobCid } from './blob-utils';
 
-export async function downloadPaste(did: At.DID, rkey: string) {
+export async function downloadPaste(did: Did, rkey: string) {
     const unauthedAgent = await KittyAgent.getOrCreatePds(did);
 
-    const { value: record, uri } = await unauthedAgent.get({
+    const { value: record, uri } = await unauthedAgent.getRecord({
         collection: 'blue.zio.atfile.upload',
         repo: did,
         rkey,
@@ -18,16 +19,16 @@ export async function downloadPaste(did: At.DID, rkey: string) {
 
     const blob: Uint8Array = await unauthedAgent.getBlobAsBinary({
         did,
-        cid: record.blob.ref.$link,
+        cid: getBlobCid(record.blob),
     });
 
     return { uri, text: new TextDecoder().decode(await decompress(blob)) };
 }
 
-export async function downloadEncryptedPaste(did: At.DID, rkey: string, passphrase: string) {
+export async function downloadEncryptedPaste(did: Did, rkey: string, passphrase: string) {
     const unauthedAgent = await KittyAgent.getOrCreatePds(did);
 
-    const { value: record, uri } = await unauthedAgent.get({
+    const { value: record, uri } = await unauthedAgent.getRecord({
         collection: 'blue.zio.atfile.upload',
         repo: did,
         rkey,
@@ -39,7 +40,7 @@ export async function downloadEncryptedPaste(did: At.DID, rkey: string, passphra
 
     const blob: Uint8Array = await unauthedAgent.getBlobAsBinary({
         did,
-        cid: record.blob.ref.$link,
+        cid: getBlobCid(record.blob),
     });
 
     return { uri, text: new TextDecoder().decode(await decryptData(blob, passphrase)) };

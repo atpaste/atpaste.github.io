@@ -1,4 +1,4 @@
-import type { At } from '@atcute/client/lexicons';
+import type { Did } from '@atcute/lexicons';
 
 import type { KittyAgent } from 'kitty-agent';
 import { StatefulSvelteOAuthClient } from 'kitty-agent/oauth-svelte';
@@ -7,7 +7,7 @@ import { derived, writable, type Readable } from 'svelte/store';
 
 export interface LoginState {
     readonly handle: string;
-    readonly did: At.DID;
+    readonly did: Did;
     readonly pds: string;
     readonly agent: KittyAgent;
     readonly client: AtpasteClient;

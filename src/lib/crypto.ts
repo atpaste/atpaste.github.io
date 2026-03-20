@@ -1,5 +1,5 @@
 import { Encrypter, Decrypter } from 'age-encryption';
-import { randomBytes } from '@noble/hashes/utils';
+import { randomBytes } from '@noble/hashes/utils.js';
 import { toString as ui8ToString } from 'uint8arrays';
 
 function toBase58(buffer: Uint8Array) {

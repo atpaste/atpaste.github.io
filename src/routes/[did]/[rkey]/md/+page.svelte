@@ -1,7 +1,6 @@
 <script lang="ts">
     import { page } from '$app/state';
     import { downloadEncryptedPaste, downloadPaste } from '$lib/atproto/unauthed-client';
-    import type { At } from '@atcute/client/lexicons';
 
     import remarkParse from 'remark-parse';
     import { unified } from 'unified';
@@ -14,7 +13,7 @@
     import type { AtUri } from '@atproto/syntax';
 
 	const did = page.params.did;
-    const [rkey, language] = page.params.rkey.split('.');
+    const [rkey, language] = page.params.rkey!.split('.');
     const cryptoKey = document.location.hash.slice(1);
 
     let pre: HTMLPreElement;
@@ -37,14 +36,15 @@
     onMount(() => {
         promise = (async () => {
             const paste = cryptoKey
-                ? await downloadEncryptedPaste(did as At.DID, rkey, cryptoKey)
-                : await downloadPaste(did as At.DID, rkey);
+                ? await downloadEncryptedPaste(did as Did, rkey, cryptoKey)
+                : await downloadPaste(did as Did, rkey);
 
             return { uri: paste.uri, html: await renderMarkdown(paste.text) };
         })();
     })
 
     import "@picocss/pico/css/pico.blue.css";
+    import type { Did } from '@atcute/lexicons';
 </script>
 
 <main class="container">

@@ -1,5 +1,5 @@
 import { type KittyAgent, getSha256, ShortId } from 'kitty-agent';
-import type { At } from '@atcute/client/lexicons';
+import type { Did, Cid, ResourceUri, Blob as AtBlob, LegacyBlob } from '@atcute/lexicons';
 import { now as tidNow } from '@atcute/tid';
 import { compress } from '$lib/zlib';
 import { encryptData, generatePassphrase } from '$lib/crypto';
@@ -7,7 +7,7 @@ import { encryptData, generatePassphrase } from '$lib/crypto';
 export class AtpasteClient {
     constructor(private readonly loginState: {
         readonly handle: string;
-        readonly did: At.DID;
+        readonly did: Did;
         readonly pds: string;
         readonly agent: KittyAgent;
     }) {}
@@ -24,11 +24,11 @@ export class AtpasteClient {
         pasteContents: string,
         compression?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9,
         existingCid?: string,
-    ): Promise<{ rkey: string; cid: At.CID; uri: At.Uri; }> {
+    ): Promise<{ rkey: string; cid: Cid; uri: ResourceUri; }> {
         const pageBinary = await compress(new TextEncoder().encode(pasteContents), compression);
         const mimeType = 'application/zlib';
 
-        const blob = await this.agent.uploadBlob(new Blob([pageBinary], { type: mimeType }));
+        const blob = await this.agent.uploadBlob(new Blob([pageBinary as BlobPart], { type: mimeType }));
 
         const rkey = ShortId.now();
 
@@ -61,12 +61,12 @@ export class AtpasteClient {
     async uploadFile(
         file: Uint8Array | Blob,
         existingCid?: string,
-    ): Promise<{ rkey: string; cid: At.CID; uri: At.Uri; blob: { pds: string; did: At.DID; cid: At.CID; } }> {
+    ): Promise<{ rkey: string; cid: Cid; uri: ResourceUri; blob: { pds: string; did: Did; cid: Cid; } }> {
         const mimeType = file instanceof Blob
             ? file.type
             : (await import('file-type-mime')).parse(file.buffer as ArrayBuffer)?.mime ?? 'application/octet-stream';
 
-        const blob = await this.agent.uploadBlob(new Blob([file], { type: mimeType }));
+        const blob = await this.agent.uploadBlob(new Blob([file as BlobPart], { type: mimeType }));
 
         const rkey = ShortId.now();
 
@@ -107,12 +107,12 @@ export class AtpasteClient {
     async uploadEncryptedPaste(
         pasteContents: string,
         existingCid?: string,
-    ): Promise<{ passphrase: string, rkey: string; cid: At.CID; uri: At.Uri; }> {
+    ): Promise<{ passphrase: string, rkey: string; cid: Cid; uri: ResourceUri; }> {
         const passphrase = generatePassphrase(128);
         const pageBinary = await encryptData(new TextEncoder().encode(pasteContents), passphrase);
         const mimeType = 'application/vnd.age'; // https://github.com/jshttp/mime-db/blob/49f8df0e170c7b40785e8aa4f464793b7fcfa41b/src/iana-types.json#L3277-L3282
 
-        const blob = await this.agent.uploadBlob(new Blob([pageBinary], { type: mimeType }));
+        const blob = await this.agent.uploadBlob(new Blob([pageBinary as BlobPart], { type: mimeType }));
 
         const rkey = ShortId.now();
         const date = new Date().toISOString();
@@ -147,7 +147,7 @@ export class AtpasteClient {
         return { ...result, rkey, passphrase };
     }
 
-    async listPastesAndFiles(): Promise<{ rkey: string; blob?: At.Blob<string>; cid: string; isEncrypted: boolean; isFile: boolean; date: Date; }[]> {
+    async listPastesAndFiles(): Promise<{ rkey: string; blob?: AtBlob | LegacyBlob; cid: string; isEncrypted: boolean; isFile: boolean; date: Date; }[]> {
         const { records: uploads } = await this.agent.list({
             collection: 'blue.zio.atfile.upload',
             repo: this.user.did,
