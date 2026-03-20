@@ -17,7 +17,8 @@ const oauthClient: StatefulSvelteOAuthClient<AtpasteClient> = new StatefulSvelte
     {
         clientId: import.meta.env.VITE_OAUTH_CLIENT_ID,
         redirectUri: import.meta.env.VITE_OAUTH_REDIRECT_URIS
-            .find(uri => document.location.host === new URL(uri).host) ?? import.meta.env.VITE_OAUTH_REDIRECT_URIS[0],
+            .split(',')
+            .find(uri => document.location.host === new URL(uri).host) ?? import.meta.env.VITE_OAUTH_REDIRECT_URIS.split(',')[0],
         scope: import.meta.env.VITE_OAUTH_SCOPE,
     },
     { createWritableStore: writable, createDerivedStore: derived },

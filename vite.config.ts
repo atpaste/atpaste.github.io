@@ -15,7 +15,7 @@ export default defineConfig({
             config(_conf, { command }) {
                 if (command === 'build') {
                     process.env.VITE_OAUTH_CLIENT_ID = metadata.client_id;
-                    process.env.VITE_OAUTH_REDIRECT_URIS = metadata.redirect_uris;
+                    process.env.VITE_OAUTH_REDIRECT_URIS = metadata.redirect_uris.join(',');
                 } else {
                     const redirectUri = (() => {
                         const url = new URL(metadata.redirect_uris[0]);
@@ -26,7 +26,7 @@ export default defineConfig({
 
                     process.env.VITE_DEV_SERVER_PORT = String(SERVER_PORT);
                     process.env.VITE_OAUTH_CLIENT_ID = clientId;
-                    process.env.VITE_OAUTH_REDIRECT_URIS = [redirectUri];
+                    process.env.VITE_OAUTH_REDIRECT_URIS = redirectUri;
                 }
 
                 process.env.VITE_CLIENT_URI = metadata.client_uri;
