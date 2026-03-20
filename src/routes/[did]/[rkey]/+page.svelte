@@ -66,8 +66,14 @@
 
 </script>
 
-<pre bind:this={pre} id="pre" class="codecup">{#if promise
+<pre bind:this={pre} id="pre" class="codecup wrappy">{#if promise
 }{#await promise
     }Loading...{:then file
     }{#if 'text' in file}{file.text}{:else}{@html file.html}{/if}{/await
 }{/if}</pre>
+
+<style lang="scss">
+    .wrappy {
+        white-space: pre-wrap;
+    }
+</style>
