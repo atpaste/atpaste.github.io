@@ -3,7 +3,7 @@
     "client_name": "atpaste",
     "client_uri": "https://atpaste.github.io",
     "redirect_uris": ["https://atpaste.github.io/oauth/redirect", "https://paste.wisp.place/oauth/redirect"],
-    "scope": "atproto transition:generic",
+    "scope": "atproto repo:blue.zio.atfile.upload blob:*/*",
     "grant_types": ["authorization_code", "refresh_token"],
     "response_types": ["code"],
     "token_endpoint_auth_method": "none",
