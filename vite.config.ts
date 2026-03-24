@@ -10,7 +10,9 @@ const SERVER_PORT = 12520;
 
 export default defineConfig({
     plugins: [
-        analyzer(),
+        analyzer({
+            analyzerMode: 'static'
+        }),
         sveltekit(),
         // injects OAuth-related environment variables
         {
