@@ -1,3 +1,6 @@
 [submodule "lexicons/zio-lexicons"]
 	path = lexicons/zio-lexicons
 	url = https://github.com/uwx/zio-lexicons
+[submodule "src/lib/vendor/codecup"]
+	path = src/lib/vendor/codecup
+	url = https://github.com/atpaste/codecup

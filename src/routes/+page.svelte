@@ -1,9 +1,11 @@
 <script lang="ts">
     import { onMount } from 'svelte';
 
-    import CodeCup from '@calumk/codecup';
+    // biome-ignore lint/style/useImportType: biome bug
+    import CodeCup from '$lib/vendor/codecup/CodeCup.svelte';
     import { authenticateIfNecessary, revokeSessions, savedHandle, user, waitForInitialSession } from '$lib/atproto/signed-in-user';
     import { goto } from '$app/navigation';
+    import grammars from '$lib/languages';
 
     const defaultValue = `# Welcome to Atpaste!
 
@@ -23,308 +25,9 @@ Created by @uwx https://github.com/uwx`;
     let value = $state<string>(localStorage.value ?? defaultValue);
 
     let isEncrypted = $state<boolean>(localStorage.isEncrypted ?? false);
-    let flask = $state<CodeCup>();
+    let flask: CodeCup | undefined;
     let language = $state<string>(localStorage.language ?? 'markdown');
-    let languages = [
-        'abap',
-        'abnf',
-        'actionscript',
-        'ada',
-        'agda',
-        'al',
-        'antlr4',
-        'apacheconf',
-        'apex',
-        'apl',
-        'applescript',
-        'aql',
-        'arduino',
-        'arff',
-        'armasm',
-        'arturo',
-        'asciidoc',
-        'asm6502',
-        'asmatmel',
-        'aspnet',
-        'autohotkey',
-        'autoit',
-        'avisynth',
-        'avro-idl',
-        'awk',
-        'bash',
-        'basic',
-        'batch',
-        'bbcode',
-        'bbj',
-        'bicep',
-        'birb',
-        'bison',
-        'bnf',
-        'bqn',
-        'brainfuck',
-        'brightscript',
-        'bro',
-        'bsl',
-        'c',
-        'cfscript',
-        'chaiscript',
-        'cil',
-        'cilkc',
-        'cilkcpp',
-        'clike',
-        'clojure',
-        'cmake',
-        'cobol',
-        'coffeescript',
-        'concurnas',
-        'cooklang',
-        'coq',
-        'cpp',
-        'crystal',
-        'csharp',
-        'cshtml',
-        'csp',
-        'css',
-        'css-extras',
-        'csv',
-        'cue',
-        'cypher',
-        'd',
-        'dart',
-        'dataweave',
-        'dax',
-        'dhall',
-        'diff',
-        'django',
-        'dns-zone-file',
-        'docker',
-        'dot',
-        'ebnf',
-        'editorconfig',
-        'eiffel',
-        'ejs',
-        'elixir',
-        'elm',
-        'erb',
-        'erlang',
-        'etlua',
-        'excel-formula',
-        'factor',
-        'false',
-        'firestore-security-rules',
-        'flow',
-        'fortran',
-        'fsharp',
-        'ftl',
-        'gap',
-        'gcode',
-        'gdscript',
-        'gedcom',
-        'gettext',
-        'gherkin',
-        'git',
-        'glsl',
-        'gml',
-        'gn',
-        'go',
-        'go-module',
-        'gradle',
-        'graphql',
-        'groovy',
-        'haml',
-        'handlebars',
-        'haskell',
-        'haxe',
-        'hcl',
-        'hlsl',
-        'hoon',
-        'hpkp',
-        'hsts',
-        'http',
-        'ichigojam',
-        'icon',
-        'icu-message-format',
-        'idris',
-        'iecst',
-        'ignore',
-        'inform7',
-        'ini',
-        'io',
-        'j',
-        'java',
-        'javadoc',
-        'javadoclike',
-        'javascript',
-        'javastacktrace',
-        'jexl',
-        'jolie',
-        'jq',
-        'js-extras',
-        'js-templates',
-        'jsdoc',
-        'json',
-        'json5',
-        'jsonp',
-        'jsstacktrace',
-        'jsx',
-        'julia',
-        'keepalived',
-        'keyman',
-        'kotlin',
-        'kumir',
-        'kusto',
-        'latex',
-        'latte',
-        'less',
-        'lilypond',
-        'linker-script',
-        'liquid',
-        'lisp',
-        'livescript',
-        'llvm',
-        'log',
-        'lolcode',
-        'lua',
-        'magma',
-        'makefile',
-        'markdown',
-        'markup',
-        'markup-templating',
-        'mata',
-        'matlab',
-        'maxscript',
-        'mel',
-        'mermaid',
-        'metafont',
-        'mizar',
-        'mongodb',
-        'monkey',
-        'moonscript',
-        'n1ql',
-        'n4js',
-        'nand2tetris-hdl',
-        'naniscript',
-        'nasm',
-        'neon',
-        'nevod',
-        'nginx',
-        'nim',
-        'nix',
-        'nsis',
-        'objectivec',
-        'ocaml',
-        'odin',
-        'opencl',
-        'openqasm',
-        'oz',
-        'parigp',
-        'parser',
-        'pascal',
-        'pascaligo',
-        'pcaxis',
-        'peoplecode',
-        'perl',
-        'php',
-        'php-extras',
-        'phpdoc',
-        'plaintext',
-        'plant-uml',
-        'plsql',
-        'powerquery',
-        'powershell',
-        'processing',
-        'prolog',
-        'promql',
-        'properties',
-        'protobuf',
-        'psl',
-        'pug',
-        'puppet',
-        'pure',
-        'purebasic',
-        'purescript',
-        'python',
-        'q',
-        'qml',
-        'qore',
-        'qsharp',
-        'r',
-        'racket',
-        'reason',
-        'regex',
-        'rego',
-        'renpy',
-        'rescript',
-        'rest',
-        'rip',
-        'roboconf',
-        'robotframework',
-        'ruby',
-        'rust',
-        'sas',
-        'sass',
-        'scala',
-        'scheme',
-        'scss',
-        'shell-session',
-        'smali',
-        'smalltalk',
-        'smarty',
-        'sml',
-        'solidity',
-        'solution-file',
-        'soy',
-        'sparql',
-        'splunk-spl',
-        'sqf',
-        'sql',
-        'squirrel',
-        'stan',
-        'stata',
-        'stylus',
-        'supercollider',
-        'swift',
-        'systemd',
-        't4-cs',
-        't4-templating',
-        't4-vb',
-        'tap',
-        'tcl',
-        'textile',
-        'toml',
-        'tremor',
-        'tsx',
-        'tt2',
-        'turtle',
-        'twig',
-        'typescript',
-        'typoscript',
-        'unrealscript',
-        'uorazor',
-        'uri',
-        'v',
-        'vala',
-        'vbnet',
-        'velocity',
-        'verilog',
-        'vhdl',
-        'vim',
-        'visual-basic',
-        'warpscript',
-        'wasm',
-        'web-idl',
-        'wgsl',
-        'wiki',
-        'wolfram',
-        'wren',
-        'xeora',
-        'xml-doc',
-        'xojo',
-        'xquery',
-        'yaml',
-        'yang',
-        'zig',
-    ];
+    let languages = Object.keys(grammars);
     let initialSessionPromise = $state<Promise<void>>();
     
     $effect(() => {
@@ -334,34 +37,10 @@ Created by @uwx https://github.com/uwx`;
         localStorage.language = language;
     });
 
-    $effect(() => {
-        flask?.updateLanguage(language)
-    })
-
     onMount(() => {
         initialSessionPromise = waitForInitialSession();
 
         processContent(); // Update urlInput and download link
-
-        flask = new CodeCup('#text', {
-            language: 'ruby',
-            defaultTheme: false,
-            minLines: 25,
-            maxLines: Infinity,
-        });
-        console.log(flask);
-
-        // How to listen for changes on your editor
-        flask.onUpdate((code) => {
-            value = code;
-        });
-
-        flask.updateCode(value);
-
-        return () => {
-            flask?.dispose();
-            flask = undefined;
-        };
     });
 
     function processContent() {
@@ -420,7 +99,6 @@ Created by @uwx https://github.com/uwx`;
         event.preventDefault();
 
         value = '';
-        flask?.updateCode(value);
         return false;
     }
 
@@ -458,7 +136,18 @@ Created by @uwx https://github.com/uwx`;
             {/if}
         {/if}
     </div>
-    <div id="text"></div>
+    <div id="text">
+        <CodeCup
+            bind:this={flask}
+            bind:code={value}
+            {language}
+            defaultTheme='dark'
+            minLines={25}
+            maxLines={Infinity}
+            onupdate={(code) => { value = code; }}
+            grammars={grammars}
+        />
+    </div>
 </div>
 
 <style lang="scss">
@@ -505,6 +194,10 @@ Created by @uwx https://github.com/uwx`;
         border: 1px solid #4195d2;
         padding: 5px;
         border-radius: 3px;
+    }
+
+    :global(.codecup) {
+        background: none !important;
     }
     
     @media (min-width: 600px) {

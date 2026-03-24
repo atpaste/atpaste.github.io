@@ -5,9 +5,10 @@
     import remarkParse from 'remark-parse';
     import { unified } from 'unified';
     import remarkRehype from 'remark-rehype';
-    import rehypeExpressiveCode, { type RehypeExpressiveCodeOptions } from 'rehype-expressive-code';
+    import rehypeHighlight, { type Options as RehypeHighlightOptions } from 'rehype-highlight';
     import rehypeSanitize from 'rehype-sanitize';
     import rehypeStringify from 'rehype-stringify';
+    import languages from '$lib/languages'
 
     import { onMount } from 'svelte';
     import type { AtUri } from '@atproto/syntax';
@@ -25,8 +26,9 @@
             .use(remarkParse)
             .use(remarkRehype)
             .use(rehypeSanitize)
-            .use(rehypeExpressiveCode, {
-            } satisfies RehypeExpressiveCodeOptions)
+            .use(rehypeHighlight, {
+                languages
+            } satisfies RehypeHighlightOptions)
             .use(rehypeStringify)
             .process(markdown);
 

@@ -1,5 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import { analyzer } from 'vite-bundle-analyzer';
 
 import metadata from './static/oauth/client-metadata.json' with { type: 'json' };
 import { createHash } from 'node:crypto';
@@ -9,6 +10,7 @@ const SERVER_PORT = 12520;
 
 export default defineConfig({
     plugins: [
+        analyzer(),
         sveltekit(),
         // injects OAuth-related environment variables
         {

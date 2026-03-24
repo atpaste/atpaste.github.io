@@ -4,39 +4,13 @@
     import type { Did } from '@atcute/lexicons';
     import type { AtUri } from '@atproto/syntax';
 
-    import Prism from 'prismjs';
-    import 'prismjs/plugins/autoloader/prism-autoloader';
+    import { createLowlight, common } from 'lowlight';
+    import { Unist } from '@typematter/svelte-unist';
+    import { components as hastComponents } from '@typematter/svelte-hast';
+    import type { Root } from 'hast';
     import { onMount } from 'svelte';
 
-    const languagesPath = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
-    const useMinified = false;
-    
-	/**
-	 * @param {string} lang
-	 * @returns {string}
-	 */
-	function getLanguagePath(lang: string): string {
-		return `${languagesPath}prism-${lang}${useMinified ? '.min' : ''}.js`;
-	}
-
-	function addScript(src: string) {
-        return new Promise<void>((resolve, reject) => {
-            const s = document.createElement('script');
-            s.src = src;
-            s.async = true;
-            s.onload = () => {
-                document.body.removeChild(s);
-                resolve();
-            };
-            s.onerror = () => {
-                document.body.removeChild(s);
-                reject();
-            };
-            document.body.appendChild(s);
-        });
-    }
-
-    Prism.manual = true;
+    const lowlight = createLowlight(common);
 
 	const did = page.params.did;
     const [rkey, language] = page.params.rkey!.split('.');
@@ -44,33 +18,34 @@
 
     let pre: HTMLPreElement;
 
-    let promise = $state<Promise<{ uri: AtUri; text: string; } | { uri: AtUri; html: string; }>>();
+    let result = $state<{ uri: AtUri; text: string; tree?: Root }>();
+    let error = $state<string>();
 
     onMount(() => {
-        promise = Promise.allSettled([
-            addScript(getLanguagePath(language)),
-            cryptoKey
-                ? downloadEncryptedPaste(did as Did, rkey, cryptoKey)
-                : downloadPaste(did as Did, rkey)
-        ]).then(([addScriptResult, pasteResult]) => {
-            if (pasteResult.status === 'rejected') throw new Error(pasteResult.reason);
-            if (addScriptResult.status !== 'rejected') {
-                return {
-                    uri: pasteResult.value.uri,
-                    html: Prism.highlight(pasteResult.value.text, Prism.languages[language], language),
-                };
+        const pastePromise = cryptoKey
+            ? downloadEncryptedPaste(did as Did, rkey, cryptoKey)
+            : downloadPaste(did as Did, rkey);
+
+        pastePromise.then((paste) => {
+            let tree: Root | undefined;
+            try {
+                if (lowlight.registered(language)) {
+                    tree = lowlight.highlight(language, paste.text);
+                }
+            } catch {
+                // fall back to plain text
             }
-            return pasteResult.value;
+            result = { ...paste, tree };
+        }).catch((err) => {
+            error = String(err);
         });
     })
-
 </script>
 
-<pre bind:this={pre} id="pre" class="codecup wrappy">{#if promise
-}{#await promise
-    }Loading...{:then file
-    }{#if 'text' in file}{file.text}{:else}{@html file.html}{/if}{/await
-}{/if}</pre>
+<pre bind:this={pre} id="pre" class="codecup wrappy">{#if error
+    }{error}{:else if result
+    }{#if result.tree}<code class="hljs language-{language}"><Unist ast={result.tree} components={hastComponents} /></code>{:else}{result.text}{/if}{:else
+    }Loading...{/if}</pre>
 
 <style lang="scss">
     .wrappy {

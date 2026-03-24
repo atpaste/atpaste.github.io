@@ -44,41 +44,42 @@ body {
     color: $main;
 }
 
-.codecup .token.punctuation { color: $punctuation; }
-.codecup .token.keyword { color: $keyword; }
-.codecup .token.operator { color: $operator; }
-.codecup .token.string { color: $string; }
-.codecup .token.comment { color: $comment; }
-.codecup .token.function { color: $function; }
-.codecup .token.boolean { color: $boolean; }
-.codecup .token.number { color: $number; }
-.codecup .token.selector { color: $selector; }
-.codecup .token.property { color: $property; }
-.codecup .token.tag { color: $tag; }
-.codecup .token.attr-value { color: $attr-value; }
+.codecup .hljs-punctuation, .codecup .hljs-bullet { color: $punctuation; }
+.codecup .hljs-keyword { color: $keyword; }
+.codecup .hljs-operator { color: $operator; }
+.codecup .hljs-string { color: $string; }
+.codecup .hljs-comment { color: $comment; }
+.codecup .hljs-function { color: $function; }
+.codecup .hljs-boolean { color: $boolean; }
+.codecup .hljs-number { color: $number; }
+.codecup .hljs-selector { color: $selector; }
+.codecup .hljs-property { color: $property; }
+.codecup .hljs-tag { color: $tag; }
+.codecup .hljs-attr-value { color: $attr-value; }
 
-.codecup .token.prolog { color: $prolog; }
-.codecup .token.cdata { color: $cdata; }
-.codecup .token.constant { color: $constant; }
-.codecup .token.builtin { color: $builtin; }
-.codecup .token.important { color: $important; }
-.codecup .token.atrule { color: $atrule; }
-.codecup .token.doctype { color: $doctype; }
-.codecup .token.operator { color: $operator; }
-.codecup .token.inserted { color: $inserted; }
-.codecup .token.class-name { color: $class-name; }
-.codecup .token.symbol { color: $symbol; }
-.codecup .token.attr-name { color: $attr-name; }
-.codecup .token.deleted { color: $deleted; }
-.codecup .token.regex { color: $regex; }
-.codecup .token.char { color: $char; }
-.codecup .token.variable { color: $variable; }
-.codecup .token.entity { color: $entity; }
-.codecup .token.url { color: $url; }
+.codecup .hljs-prolog { color: $prolog; }
+.codecup .hljs-cdata { color: $cdata; }
+.codecup .hljs-constant { color: $constant; }
+.codecup .hljs-builtin { color: $builtin; }
+.codecup .hljs-important { color: $important; }
+.codecup .hljs-section { color: $important; }
+.codecup .hljs-atrule { color: $atrule; }
+.codecup .hljs-doctype { color: $doctype; }
+.codecup .hljs-operator { color: $operator; }
+.codecup .hljs-inserted { color: $inserted; }
+.codecup .hljs-class-name { color: $class-name; }
+.codecup .hljs-symbol { color: $symbol; }
+.codecup .hljs-attr-name { color: $attr-name; }
+.codecup .hljs-deleted { color: $deleted; }
+.codecup .hljs-regex { color: $regex; }
+.codecup .hljs-char { color: $char; }
+.codecup .hljs-variable { color: $variable; }
+.codecup .hljs-entity { color: $entity; }
+.codecup .hljs-url { color: $url; }
 
-.codecup .token.bold { font-weight: bold; }
-.codecup .token.italic { font-style: italic; }
-.codecup .token.entity { cursor: help; }
+.codecup .hljs-strong { font-weight: bold; }
+.codecup .hljs-emphasis { font-style: italic; }
+.codecup .hljs-entity { cursor: help; }
 
 .codecup__textarea {
     caret-color: $main !important;
@@ -106,4 +107,9 @@ body {
 
 .codecup::selection, .codecup ::selection {
     background: $highlight-background !important;
+}
+
+// Make codecup wrap long lines (I don't know why this isn't the default)
+.codecup__textarea, .codecup__pre {
+    white-space: pre-wrap !important;
 }
